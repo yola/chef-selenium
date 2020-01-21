@@ -95,16 +95,18 @@ def selenium_linux_service(name, exec, args, port, xdisplay)
   systype = selenium_systype
   if systype == 'systemd'
     path = "/etc/systemd/system/#{name}.service"
+    service_mode = 0o644
     formatted_args = args.join(' ')
   else
     path = "/etc/init.d/#{name}"
+    service_mode = 0o755
     formatted_args = args.join(' ').gsub('"', '\"')
   end
 
   template path do
     source "#{systype}.erb"
     cookbook 'selenium'
-    mode '0755'
+    mode service_mode
     variables(
       name: name,
       user: username,
