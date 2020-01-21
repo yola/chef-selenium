@@ -30,9 +30,11 @@ def args
 end
 
 action :install do
-  unless run_context.loaded_recipe? 'selenium::default'
-    recipe_eval do
-      run_context.include_recipe 'selenium::default'
+  unless ::File.symlink?(selenium_jar_link)
+    unless run_context.loaded_recipe? 'selenium::default'
+      recipe_eval do
+        run_context.include_recipe 'selenium::default'
+      end
     end
   end
 
